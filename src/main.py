@@ -38,13 +38,13 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-
+            pass
         if keys[pygame.K_RIGHT]:
-
+            pass
         if keys[pygame.K_UP]:
-
+            pass
         if keys[pygame.K_DOWN]:
-        
+            pass
         # draw screen 
         screen.blit(surf_background, (0,0))
         screen.fill(background_color)
