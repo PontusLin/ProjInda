@@ -3,7 +3,7 @@ from sys import exit
 import random
 
 # variables
-(width, height) = (1000, 600)
+(width, height) = (1200, 800)
 background_color = (100,100,200)
 
 
@@ -16,7 +16,9 @@ def main():
     font = pygame.font.Font(None, 40)
     screen = pygame.display.set_mode((width, height))
     surf_background = pygame.Surface(screen.get_size())
-    surf_welcome = font.render('Welcome to TANKS!',False, 'Green')
+    #surf_welcome = font.render('Welcome to TANKS!',False, 'Green')
+    surf_tank = pygame.image.load('assets/playertank.png').convert_alpha()
+    rect_tank = surf_tank.get_rect(midbottom = (200, 300))
     
     pygame.display.set_caption('Tanks')
     
@@ -43,7 +45,8 @@ def main():
         # draw screen 
         screen.blit(surf_background, (0,0))
         screen.fill(background_color)
-        screen.blit(surf_welcome, (100, 50))
+        #screen.blit(surf_welcome, (100, 50))
+        screen.blit(surf_tank, rect_tank)
         
         # update display every iteration
         pygame.display.update()
