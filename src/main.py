@@ -5,7 +5,8 @@ import random
 # variables
 (width, height) = (1000, 600)
 background_color = (100,100,200)
-    
+
+
 # main class
 def main():
     # initialize pygame
@@ -40,7 +41,8 @@ def main():
         
         # maximum of 60 fps
         clock.tick(60)
-        
+  
+      
 main()
     
     
