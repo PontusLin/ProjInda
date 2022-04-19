@@ -5,8 +5,7 @@ import random
 # variables
 (width, height) = (1000, 600)
 background_color = (100,100,200)
-
-
+    
 # main class
 def main():
     # initialize pygame
