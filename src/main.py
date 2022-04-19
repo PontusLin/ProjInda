@@ -30,6 +30,15 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.QUIT()
                 exit()
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT]:
+
+        if keys[pygame.K_RIGHT]:
+
+        if keys[pygame.K_UP]:
+
+        if keys[pygame.K_DOWN]:
         
         # draw screen 
         screen.blit(surf_background, (0,0))
@@ -41,7 +50,7 @@ def main():
         
         # maximum of 60 fps
         clock.tick(60)
-        
+            
 main()
     
     
