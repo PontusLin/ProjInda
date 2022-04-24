@@ -13,6 +13,12 @@ class tank:
     def decrementHealth(init):
         pass
     
+    def draw(self):
+        pass
+    
+    def handle_keys(self):
+        pass
+    
     
 
     
