@@ -66,7 +66,7 @@ def main():
         
         # maximum of 60 fps
         clock.tick(60)
-            
+
 main()
     
     

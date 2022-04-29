@@ -5,7 +5,7 @@ This is our workplan for the project
 - [x] Decide on a topic
 - [] Present topic for niklas
 - [x] Create a single repo on Github and share with partner
-- [] Write a short project description, using the repo's README
+- [x] Write a short project description, using the repo's README
 - [] Decide and map out the Project Plan using Features/Milestones via Issue Tracker
 - [] Start developing!
 
