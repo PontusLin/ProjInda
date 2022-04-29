@@ -20,9 +20,6 @@ def main():
     
     playerTank = tank(75, 535, screen, 'assets/playertank.png')
     
-    surf_playertank = pygame.image.load('assets/playertank.png').convert_alpha()
-    rect_playertank = surf_playertank.get_rect(midbottom = (75, 535))
-    
     surf_enemytank = pygame.image.load('assets/enemytank.png').convert_alpha()
     rect_enemytank = surf_enemytank.get_rect(midbottom = (1000, 320))
     
