@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 from tank import tank
+from obstacle import obstacle
 
 # variables
 (width, height) = (1200, 800)
@@ -18,12 +19,17 @@ def main():
     surf_background = pygame.image.load('assets/background.png').convert_alpha()
     pygame.display.set_caption('Tanks')
 
-    surf_obstacle = pygame.image.load('assets/obstacle.png').convert_alpha()
-    rect_obstacle1 = surf_obstacle.get_rect(topleft=(100, 1))
+    # surf_obstacle = pygame.image.load('assets/obstacle.png').convert_alpha()
+    # rect_obstacle1 = surf_obstacle.get_rect(topleft=(100, 1))
+
+    # make a group with all obstacles. xpos and ypos will be topleft 
+    # location of rect
+    obstacles = pygame.sprite.Group()
+    obstacles.add(obstacle(100, 1, screen, 'assets/obstacle.png'))
 
     # make 1 single group per playerTank
     playerTank_1 = pygame.sprite.GroupSingle()
-    playerTank_1.add(tank(75, 535, screen, 'assets/playertank.png'))
+    playerTank_1.add(tank(75, 535, screen, 'assets/playertank.png', obstacles))
 
     # create clock object to ensure good fps
     clock = pygame.time.Clock()
@@ -40,16 +46,20 @@ def main():
         screen.blit(surf_background, (0, 0))
 
         # blit obstacle (will be sprite later)
-        screen.blit(surf_obstacle, rect_obstacle1)
+        # screen.blit(surf_obstacle, rect_obstacle1)
 
         # update and draw the player tanks
         playerTank_1.draw(screen)
         playerTank_1.update()
+
+        # draw all the obstacles
+        obstacles.draw(screen)
 
         # update display every iteration
         pygame.display.update()
 
         # maximum of 60 fps
         clock.tick(60)
+
 
 main()

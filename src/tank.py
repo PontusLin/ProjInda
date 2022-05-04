@@ -4,10 +4,11 @@ import math
 
 
 class tank(pygame.sprite.Sprite):
-    def __init__(self, xpos, ypos, screen, assetPicture):
+    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group):
         super().__init__()
         self.screen = screen
         self.xPos = xpos
+        self.obstacle_group = obstacle_group
         self.yPos = ypos
         self.velocity = 0
         self.health = 3
@@ -27,26 +28,34 @@ class tank(pygame.sprite.Sprite):
 
     # Moves the player in the specified direction.
     def move(self, directionX, directionY):
-        self.rect.x += directionX
-        self.rect.y += directionY
-        # if player goes outside the screen,
-        # have the player re appear on the other side
-        if self.rect.x > 1200:
-            self.rect.x = 0
-        if self.rect.x < 0:
-            self.rect.x = 1200
+        # first check if colliding with something
+        collision_list = pygame.sprite.spritecollide(self, self.obstacle_group, False)
+        
+        if collision_list:
+            for obstacle in collision_list:
+                # blah blah
+                if directionX > 0:
+                    self.rect.right = obstacle.rect.left
+                if directionX < 0:
+                    self.rect.left = obstacle.rect.right
+                if directionY > 0:
+                    self.rect.bottom = obstacle.rect.top
+                if directionY < 0:
+                    self.rect.top = obstacle.rect.bottom
+        else:
+            self.rect.x += directionX
+            self.rect.y += directionY
+            # if player goes outside the screen,
+            # have the player re appear on the other side
+            if self.rect.x > 1200:
+                self.rect.x = 0
+            if self.rect.x < 0:
+                self.rect.x = 1200
 
-        if self.rect.y > 800:
-            self.rect.y = 0
-        if self.rect.y < 0:
-            self.rect.y = 800
-    # får typ inte till det
-
-    def decrementHealth(self):
-        self.health -= 1
-        if self.health < 1:
-            print('Game over')
-        # Game over, You won/lose ... blablabla
+            if self.rect.y > 800:
+                self.rect.y = 0
+            if self.rect.y < 0:
+                self.rect.y = 800
 
     # blit is not needed when using sprite
     def update(self):
