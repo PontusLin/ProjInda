@@ -49,7 +49,10 @@ class tank(pygame.sprite.Sprite):
     def update(self):
         self.player_input()
 
+    # this method moves the player in a horizontal direction
     def moveX(self, horizontal_speed):
+        # creates a copy of the player rect and moves it to where the player will
+        # move. Then checks if they will collide. if not -> move the player there
         copy_of_rect = pygame.Rect.copy(self.rect)
         copy_of_rect.x += horizontal_speed
         for obstacle_sprite in self.obstacle_group:
@@ -59,6 +62,7 @@ class tank(pygame.sprite.Sprite):
         else:
             self.rect.x += horizontal_speed
     
+    # exactly the same as moveX, but for the Y composant.
     def moveY(self, vertical_speed):
         copy_of_rect = pygame.Rect.copy(self.rect)
         copy_of_rect.y += vertical_speed
