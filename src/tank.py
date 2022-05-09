@@ -28,39 +28,46 @@ class tank(pygame.sprite.Sprite):
 
     # Moves the player in the specified direction.
     def move(self, directionX, directionY):
-        # first check if colliding with something
-        collision_list = pygame.sprite.spritecollide(self, self.obstacle_group, False)
         
-        if collision_list:
-            for obstacle in collision_list:
-                # blah blah
-                if directionX > 0:
-                    self.rect.right = obstacle.rect.left
-                if directionX < 0:
-                    self.rect.left = obstacle.rect.right
-                if directionY > 0:
-                    self.rect.bottom = obstacle.rect.top
-                if directionY < 0:
-                    self.rect.top = obstacle.rect.bottom
-        else:
-            self.rect.x += directionX
-            self.rect.y += directionY
-            # if player goes outside the screen,
-            # have the player re appear on the other side
-            if self.rect.x > 1200:
-                self.rect.x = 0
-            if self.rect.x < 0:
-                self.rect.x = 1200
+        self.moveX(directionX)
+        self.moveY(directionY)
 
-            if self.rect.y > 800:
-                self.rect.y = 0
-            if self.rect.y < 0:
-                self.rect.y = 800
+        #collision_list = pygame.sprite.spritecollide(self, self.obstacle_group, False)
+        # if player goes outside the screen,
+        # have the player re appear on the other side
+        if self.rect.x > 1230:
+            self.rect.x = -30
+        if self.rect.x < -30:
+            self.rect.x = 1230
+
+        if self.rect.y > 830:
+            self.rect.y = -30
+        if self.rect.y < -30:
+            self.rect.y = 830
 
     # blit is not needed when using sprite
     def update(self):
         self.player_input()
 
+    def moveX(self, horizontal_speed):
+        copy_of_rect = pygame.Rect.copy(self.rect)
+        copy_of_rect.x += horizontal_speed
+        for obstacle_sprite in self.obstacle_group:
+            if(obstacle_sprite.rect.colliderect(copy_of_rect)):
+                print('collision')
+                return
+        else:
+            self.rect.x += horizontal_speed
+    
+    def moveY(self, vertical_speed):
+        copy_of_rect = pygame.Rect.copy(self.rect)
+        copy_of_rect.y += vertical_speed
+        for obstacle_sprite in self.obstacle_group:
+            if(obstacle_sprite.rect.colliderect(copy_of_rect)):
+                print('collision')
+                return
+        else:
+            self.rect.y += vertical_speed
     """
     def shoot(self):
         pass
