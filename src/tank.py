@@ -1,5 +1,6 @@
 import pygame
 import math
+from turtle import speed
 #a class for the tank in pygame
 
 
@@ -8,29 +9,37 @@ class tank(pygame.sprite.Sprite):
         super().__init__()
         self.screen = screen
         self.xPos = xpos
-        self.obstacle_group = obstacle_group
         self.yPos = ypos
+        self.obstacle_group = obstacle_group
+        
         self.velocity = 0
         self.health = 3
-        self.image = pygame.image.load(assetPicture).convert_alpha()
+        
+        self.angle = 0;
+        self.rotAngle = 0;
+        
+        self.og_image = pygame.image.load(assetPicture).convert_alpha()
+        self.image = self.og_image
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
 
     def player_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            self.move(0, -3)
+            self.move(1)
         if keys[pygame.K_DOWN]:
-            self.move(0, 3)
+            self.move(-1)
         if keys[pygame.K_LEFT]:
-            self.move(-3, 0)
+            self.rotAngle = 2
+            self.rotate()
         if keys[pygame.K_RIGHT]:
-            self.move(3, 0)
+            self.rotAngle = -2
+            self.rotate()
 
     # Moves the player in the specified direction.
-    def move(self, directionX, directionY):
+    def move(self, offset):
         
-        self.moveX(directionX)
-        self.moveY(directionY)
+        self.moveX(offset)
+        self.moveY(offset)
 
         #collision_list = pygame.sprite.spritecollide(self, self.obstacle_group, False)
         # if player goes outside the screen,
@@ -50,32 +59,44 @@ class tank(pygame.sprite.Sprite):
         self.player_input()
 
     # this method moves the player in a horizontal direction
-    def moveX(self, horizontal_speed):
+    def moveX(self, offset):
         # creates a copy of the player rect and moves it to where the player will
         # move. Then checks if they will collide. if not -> move the player there
+        speed = 2
+        
         copy_of_rect = pygame.Rect.copy(self.rect)
-        copy_of_rect.x += horizontal_speed
+        copy_of_rect.x += offset*speed*math.cos(math.radians(-self.angle))
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 print('collision')
                 return
         else:
-            self.rect.x += horizontal_speed
+            self.rect.x += offset*speed*math.cos(math.radians(-self.angle))
     
     # exactly the same as moveX, but for the Y composant.
-    def moveY(self, vertical_speed):
+    def moveY(self, offset):
+        speed = 2
         copy_of_rect = pygame.Rect.copy(self.rect)
-        copy_of_rect.y += vertical_speed
+        copy_of_rect.y += offset*speed*math.sin(math.radians(-self.angle))
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 print('collision')
                 return
         else:
-            self.rect.y += vertical_speed
-    """
+            self.rect.y += offset*speed*math.sin(math.radians(-self.angle))
+    
     def shoot(self):
         pass
-    """
+    
+     # Rotate the tank as the rotate angle field is
+    def rotate(self):
+        self.image = pygame.transform.rotate(self.og_image, self.angle)
+        self.angle += self.rotAngle;
+        self.angle = self.angle % 360;
+        if self.angle < 0:
+            self.angle += 360
+        self.rect = self.image.get_rect(center = self.rect.center)
+        
     
     
     
