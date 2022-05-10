@@ -2,7 +2,7 @@ import pygame
 from sys import exit
 
 from tank import Tank
-from obstacle import obstacle
+from obstacle import Obstacle
 
 
 # variables
