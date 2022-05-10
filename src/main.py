@@ -27,14 +27,18 @@ def main():
     # make a group with all obstacles. xpos and ypos will be topleft 
     # location of rect
     obstacles = pygame.sprite.Group()
-    obstacles.add(obstacle(100, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(100, 1, screen, 'assets/obstacle.png'))
+
+    # group for bullets
+    bullet_group = pygame.sprite.Group()
+
 
     # make 1 single group per playerTank
     playerTank_1 = pygame.sprite.GroupSingle()
-    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0))
+    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0, bullet_group))
     
     playerTank_2 = pygame.sprite.GroupSingle()
-    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0))
+    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0, bullet_group))
 
     # create clock object to ensure good fps
     clock = pygame.time.Clock()
@@ -62,6 +66,10 @@ def main():
 
         # draw all the obstacles
         obstacles.draw(screen)
+
+        # draw all bullets
+        bullet_group.draw(screen)
+        bullet_group.update()
 
         # update display every iteration
         pygame.display.update()

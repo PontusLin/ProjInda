@@ -5,6 +5,7 @@ from Bullet import Bullet
 from turtle import speed
 #a class for the tank in pygame
 
+
 class Tank(pygame.sprite.Sprite):
     def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle, bullet_group):
         super().__init__()
@@ -43,7 +44,7 @@ class Tank(pygame.sprite.Sprite):
                 self.rotAngle = -2
                 self.rotate()
             if keys[pygame.K_SPACE]:
-            self.shoot()
+                self.shoot()
 
         if a == 2:
             if keys[pygame.K_a]:
