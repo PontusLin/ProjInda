@@ -1,7 +1,7 @@
 import pygame
 from sys import exit
 from tank import tank
-from obstacle import obstacle
+from obstacle import Obstacle
 
 # variables
 (width, height) = (1200, 800)

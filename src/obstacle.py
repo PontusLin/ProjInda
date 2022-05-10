@@ -1,8 +1,8 @@
 import pygame
 
 
-class obstacle(pygame.sprite.Sprite):
-
+class Obstacle(pygame.sprite.Sprite):
+    
     # create an obstacle. Obstacles are fixed and their only
     # attribute is that the player cannot travel through them
     def __init__(self, xpos, ypos, screen, assetPicture):
