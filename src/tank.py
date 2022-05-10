@@ -3,9 +3,8 @@ import math
 from turtle import speed
 #a class for the tank in pygame
 
-
-class tank(pygame.sprite.Sprite):
-    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group):
+class Tank(pygame.sprite.Sprite):
+    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle):
         super().__init__()
         self.screen = screen
         self.xPos = xpos
@@ -15,26 +14,40 @@ class tank(pygame.sprite.Sprite):
         self.velocity = 0
         self.health = 3
         
-        self.angle = 0;
-        self.rotAngle = 0;
+        self.angle = angle
+        self.rotAngle = 0
         
         self.og_image = pygame.image.load(assetPicture).convert_alpha()
         self.image = self.og_image
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
-
-    def player_input(self):
+        
+        
+    def player_input(self, a):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            self.move(1)
-        if keys[pygame.K_DOWN]:
-            self.move(-1)
-        if keys[pygame.K_LEFT]:
-            self.rotAngle = 2
-            self.rotate()
-        if keys[pygame.K_RIGHT]:
-            self.rotAngle = -2
-            self.rotate()
+        
+        if a == 1:
+            if keys[pygame.K_UP]:
+                self.move(1)
+            if keys[pygame.K_DOWN]:
+                self.move(-1)
+            if keys[pygame.K_LEFT]:
+                self.rotAngle = 2
+                self.rotate()
+            if keys[pygame.K_RIGHT]:
+                self.rotAngle = -2
+                self.rotate()
 
+        if a == 2:
+            if keys[pygame.K_a]:
+                self.rotAngle = 2
+                self.rotate()
+            if keys[pygame.K_w]:
+                self.move(-1)
+            if keys[pygame.K_d]:
+                self.rotAngle = -2
+                self.rotate()
+            if keys[pygame.K_s]:
+                self.move(1)
     # Moves the player in the specified direction.
     def move(self, offset):
         
@@ -55,8 +68,8 @@ class tank(pygame.sprite.Sprite):
             self.rect.y = 830
 
     # blit is not needed when using sprite
-    def update(self):
-        self.player_input()
+    def update(self, a):
+        self.player_input(a)
 
     # this method moves the player in a horizontal direction
     def moveX(self, offset):
@@ -90,11 +103,15 @@ class tank(pygame.sprite.Sprite):
     
      # Rotate the tank as the rotate angle field is
     def rotate(self):
-        self.image = pygame.transform.rotate(self.og_image, self.angle)
-        self.angle += self.rotAngle;
-        self.angle = self.angle % 360;
+        self.image = pygame.transform.rotate(self.og_image, self.angle).convert_alpha()
+        self.angle += self.rotAngle
+        print('angle before rotation' + str(self.angle))
+        
+        self.rotAngle
+        self.angle = self.angle % 360
         if self.angle < 0:
             self.angle += 360
+
         self.rect = self.image.get_rect(center = self.rect.center)
         
     
