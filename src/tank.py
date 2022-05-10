@@ -1,18 +1,24 @@
 import pygame
 import math
+
+from Bullet import Bullet
 from turtle import speed
 #a class for the tank in pygame
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle):
+    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle, bullet_group):
         super().__init__()
         self.screen = screen
         self.xPos = xpos
         self.yPos = ypos
+
+        # sprite groups
         self.obstacle_group = obstacle_group
-        
+        self.bullet_group = bullet_group
+
         self.velocity = 0
         self.health = 3
+        
         
         self.angle = angle
         self.rotAngle = 0
@@ -36,6 +42,8 @@ class Tank(pygame.sprite.Sprite):
             if keys[pygame.K_RIGHT]:
                 self.rotAngle = -2
                 self.rotate()
+            if keys[pygame.K_SPACE]:
+            self.shoot()
 
         if a == 2:
             if keys[pygame.K_a]:
@@ -97,9 +105,7 @@ class Tank(pygame.sprite.Sprite):
                 return
         else:
             self.rect.y += offset*speed*math.sin(math.radians(-self.angle))
-    
-    def shoot(self):
-        pass
+
     
      # Rotate the tank as the rotate angle field is
     def rotate(self):
@@ -113,13 +119,7 @@ class Tank(pygame.sprite.Sprite):
             self.angle += 360
 
         self.rect = self.image.get_rect(center = self.rect.center)
-        
-    
-    
-    
+       
 
-    
-        
-        
-        
-        
+    def shoot(self):
+        self.bullet_group.add(Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen))
