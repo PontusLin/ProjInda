@@ -28,10 +28,9 @@ def main():
     # location of rect
     obstacles = pygame.sprite.Group()
     obstacles.add(Obstacle(100, 1, screen, 'assets/obstacle.png'))
-
+        
     # group for bullets
     bullet_group = pygame.sprite.Group()
-
 
     # make 1 single group per playerTank
     playerTank_1 = pygame.sprite.GroupSingle()
@@ -66,7 +65,7 @@ def main():
 
         # draw all the obstacles
         obstacles.draw(screen)
-
+        
         # draw all bullets
         bullet_group.draw(screen)
         bullet_group.update()

@@ -17,7 +17,7 @@ class Tank(pygame.sprite.Sprite):
         self.obstacle_group = obstacle_group
         self.bullet_group = bullet_group
 
-        self.velocity = 0
+        self.velocity = 2.5
         self.health = 3
         
         
@@ -84,28 +84,29 @@ class Tank(pygame.sprite.Sprite):
     def moveX(self, offset):
         # creates a copy of the player rect and moves it to where the player will
         # move. Then checks if they will collide. if not -> move the player there
-        speed = 2
         
         copy_of_rect = pygame.Rect.copy(self.rect)
-        copy_of_rect.x += offset*speed*math.cos(math.radians(-self.angle))
+        copy_of_rect.x += offset*self.velocity*math.cos(math.radians(-self.angle))
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 print('collision')
                 return
         else:
-            self.rect.x += offset*speed*math.cos(math.radians(-self.angle))
+            self.rect.x += offset*self.velocity*math.cos(math.radians(-self.angle))
+            self.xPos += offset*self.velocity*math.cos(math.radians(-self.angle))
+            
     
     # exactly the same as moveX, but for the Y composant.
     def moveY(self, offset):
-        speed = 2
         copy_of_rect = pygame.Rect.copy(self.rect)
-        copy_of_rect.y += offset*speed*math.sin(math.radians(-self.angle))
+        copy_of_rect.y += offset*self.velocity*math.sin(math.radians(-self.angle))
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 print('collision')
                 return
         else:
-            self.rect.y += offset*speed*math.sin(math.radians(-self.angle))
+            self.rect.y += offset*self.velocity*math.sin(math.radians(-self.angle))
+            self.yPos = offset*self.velocity*math.sin(math.radians(-self.angle))
 
     
      # Rotate the tank as the rotate angle field is
