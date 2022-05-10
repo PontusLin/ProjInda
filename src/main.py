@@ -1,7 +1,9 @@
 import pygame
 from sys import exit
-from tank import tank
-from obstacle import obstacle
+
+from tank import Tank
+from obstacle import Obstacle
+
 
 # variables
 (width, height) = (1200, 800)
@@ -29,7 +31,10 @@ def main():
 
     # make 1 single group per playerTank
     playerTank_1 = pygame.sprite.GroupSingle()
-    playerTank_1.add(tank(75, 535, screen, 'assets/playertank.png', obstacles))
+    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0))
+    
+    playerTank_2 = pygame.sprite.GroupSingle()
+    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0))
 
     # create clock object to ensure good fps
     clock = pygame.time.Clock()
@@ -50,7 +55,10 @@ def main():
 
         # update and draw the player tanks
         playerTank_1.draw(screen)
-        playerTank_1.update()
+        playerTank_1.update(1)
+        
+        playerTank_2.draw(screen)
+        playerTank_2.update(2)
 
         # draw all the obstacles
         obstacles.draw(screen)
