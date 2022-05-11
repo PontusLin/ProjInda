@@ -7,22 +7,83 @@ from obstacle import Obstacle
 
 # variables
 (width, height) = (1200, 800)
+def text_objects(text, font):
+    textSurface = font.render(text, True, (0, 0, 0))
+    return textSurface, textSurface.get_rect()
+
+def startScreen(screen, clock):
+    
+    # create font
+    largeText = pygame.font.Font('freesansbold.ttf',115)
+    smallText = pygame.font.Font('freesansbold.ttf', 50)
+    
+    # create text element 'TANKS!'
+    TextSurf, TextRect = text_objects("TANKS!", largeText)
+    TextRect.center = (width/2, height/4)
+    
+    # Create 'buttons'
+    button_play_surf, button_play_rect = text_objects("Play", smallText)
+    button_play_rect.center = (width/2, height/2)
+    
+    button_quit_surf, button_quit_rect = text_objects("Quit", smallText)
+    button_quit_rect.center = (width/2, height/1.5)
+    
+    surf_tank1 = pygame.image.load('assets/playertank.png').convert_alpha()
+    rect_tank1 = surf_tank1.get_rect(center=(200, 700))
+    
+    surf_tank2 = pygame.image.load('assets/enemytank.png').convert_alpha()
+    rect_tank2 = surf_tank2.get_rect(center=(1000, 700))
+    
+    surf_bullet = pygame.image.load('assets/redBulletSmaller.png').convert_alpha()
+    rect_bullet1 = surf_bullet.get_rect(center = (270, 700))
+    rect_bullet2 = surf_bullet.get_rect(center = (300, 700))
+    rect_bullet3 = surf_bullet.get_rect(center = (330, 700))
+    
+    # backgroundcolor white for now
+    background_color = (255, 255, 255)
+    intro = True
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.QUIT()
+                exit()
+            mouse = pygame.mouse.get_pos()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(mouse)
+                if button_play_rect.topleft[0] -5 <= mouse[0] <= button_play_rect.topright[0] + 5 and button_play_rect.topleft[1] - 5 <= mouse[1] <= button_play_rect.bottomleft[1] + 5:
+                    intro = False
+                if button_quit_rect.topleft[0] -5 <= mouse[0] <= button_quit_rect.topright[0] + 5 and button_quit_rect.topleft[1] - 5 <= mouse[1] <= button_quit_rect.bottomleft[1] + 5:
+                    pygame.QUIT()
+                    exit()
+                    
+                    
+                
+        screen.fill(background_color)
+        screen.blit(TextSurf, TextRect)
+        screen.blit(button_play_surf, button_play_rect)
+        screen.blit(button_quit_surf, button_quit_rect)
+        screen.blit(surf_tank1, rect_tank1)
+        screen.blit(surf_tank2, rect_tank2)
+        screen.blit(surf_bullet, rect_bullet1)
+        screen.blit(surf_bullet, rect_bullet2)
+        screen.blit(surf_bullet, rect_bullet3)
+        
+        pygame.display.update()
+        clock.tick(60)
+        
+    
 
 # main class
-
-
 def main():
     # initialize pygame
     pygame.init()
 
     # create basic screen
-    font = pygame.font.Font(None, 40)
+    
     screen = pygame.display.set_mode((width, height))
     surf_background = pygame.image.load('assets/background.png').convert_alpha()
     pygame.display.set_caption('Tanks')
 
-    # surf_obstacle = pygame.image.load('assets/obstacle.png').convert_alpha()
-    # rect_obstacle1 = surf_obstacle.get_rect(topleft=(100, 1))
 
     # make a group with all obstacles. xpos and ypos will be topleft 
     # location of rect
@@ -42,6 +103,10 @@ def main():
     # create clock object to ensure good fps
     clock = pygame.time.Clock()
 
+    # Initialize the startscreen
+    startScreen(screen, clock)
+    
+    
     running = True
     # main game loop
     while running:
