@@ -115,7 +115,7 @@ class Tank(pygame.sprite.Sprite):
         self.angle += self.rotAngle
         print('angle before rotation' + str(self.angle))
         
-        self.rotAngle
+        self.rotAngle = 0
         self.angle = self.angle % 360
         if self.angle < 0:
             self.angle += 360
