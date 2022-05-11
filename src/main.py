@@ -7,13 +7,17 @@ from obstacle import Obstacle
 
 # variables
 (width, height) = (1200, 800)
+
+# Help function to create text objects, that will say the surface and the associated rectangle
 def text_objects(text, font):
     textSurface = font.render(text, True, (0, 0, 0))
     return textSurface, textSurface.get_rect()
 
+
+# Startscreen
 def startScreen(screen, clock):
     
-    # create font
+    # create basic fonts
     largeText = pygame.font.Font('freesansbold.ttf',115)
     smallText = pygame.font.Font('freesansbold.ttf', 50)
     
@@ -28,6 +32,7 @@ def startScreen(screen, clock):
     button_quit_surf, button_quit_rect = text_objects("Quit", smallText)
     button_quit_rect.center = (width/2, height/1.5)
     
+    # Create assets to blit on screen
     surf_tank1 = pygame.image.load('assets/playertank.png').convert_alpha()
     rect_tank1 = surf_tank1.get_rect(center=(200, 700))
     
@@ -41,15 +46,18 @@ def startScreen(screen, clock):
     
     # backgroundcolor white for now
     background_color = (255, 255, 255)
+    
+    # Loop until play- or quit button is clicked
     intro = True
     while intro:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.QUIT()
                 exit()
+            # create mouse object
             mouse = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print(mouse)
+                # If the mouse, when clicked is inside the play or quit rectangle, do an operation
                 if button_play_rect.topleft[0] -5 <= mouse[0] <= button_play_rect.topright[0] + 5 and button_play_rect.topleft[1] - 5 <= mouse[1] <= button_play_rect.bottomleft[1] + 5:
                     intro = False
                 if button_quit_rect.topleft[0] -5 <= mouse[0] <= button_quit_rect.topright[0] + 5 and button_quit_rect.topleft[1] - 5 <= mouse[1] <= button_quit_rect.bottomleft[1] + 5:
@@ -57,7 +65,7 @@ def startScreen(screen, clock):
                     exit()
                     
                     
-                
+        # Draw everything onto the screen
         screen.fill(background_color)
         screen.blit(TextSurf, TextRect)
         screen.blit(button_play_surf, button_play_rect)
@@ -79,7 +87,6 @@ def main():
     pygame.init()
 
     # create basic screen
-    
     screen = pygame.display.set_mode((width, height))
     surf_background = pygame.image.load('assets/background.png').convert_alpha()
     pygame.display.set_caption('Tanks')
