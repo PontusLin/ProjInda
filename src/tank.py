@@ -28,6 +28,9 @@ class Tank(pygame.sprite.Sprite):
         self.image = self.og_image
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
         
+        self.imageLives = pygame.image.load("assets/heart.png")
+        
+        
         
     def player_input(self, a):
         keys = pygame.key.get_pressed()
@@ -125,3 +128,11 @@ class Tank(pygame.sprite.Sprite):
 
     def shoot(self):
         self.bullet_group.add(Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen))
+
+    def printLives(self, a):
+        # First tank
+        if a == 1:
+            pass
+        # Second tank
+        if a == 2:
+            pass
