@@ -98,21 +98,21 @@ def main():
     obstacles.add(Obstacle(100, 1, screen, 'assets/obstacle.png'))
         
     # group for bullets
-    bullet_group = pygame.sprite.Group()
+    # bullet_group_player_1 = pygame.sprite.Group()
+    # bullet_group_player_2 = pygame.sprite.Group()
 
     # make 1 single group per playerTank
     playerTank_1 = pygame.sprite.GroupSingle()
-    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0, bullet_group))
+    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0))
     
     playerTank_2 = pygame.sprite.GroupSingle()
-    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0, bullet_group))
+    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0))
 
     # create clock object to ensure good fps
     clock = pygame.time.Clock()
 
     # Initialize the startscreen
     startScreen(screen, clock)
-    
     
     running = True
     # main game loop
@@ -139,8 +139,26 @@ def main():
         obstacles.draw(screen)
         
         # draw all bullets
-        bullet_group.draw(screen)
-        bullet_group.update()
+        for tank1 in playerTank_1:
+            tank1_bullets = tank1.get_bullets()
+        
+        tank1_bullets.draw(screen)
+        tank1_bullets.update()
+
+        for tank2 in playerTank_2:
+            tank2_bullets = tank2.get_bullets()
+
+        tank2_bullets.draw(screen)
+        tank2_bullets.update()
+        
+        tank1_hit = pygame.sprite.groupcollide(playerTank_1, tank2_bullets, False, True)
+        tank2_hit = pygame.sprite.groupcollide(playerTank_2, tank1_bullets, False, True)
+
+        if tank1_hit:
+            playerTank_1.sprite.reduce_lives()
+
+        if tank2_hit:
+            playerTank_2.sprite.reduce_lives()
 
         # update display every iteration
         pygame.display.update()

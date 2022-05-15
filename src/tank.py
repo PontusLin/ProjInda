@@ -7,7 +7,7 @@ from turtle import speed
 
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle, bullet_group):
+    def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle):
         super().__init__()
         self.screen = screen
         self.xPos = xpos
@@ -15,11 +15,9 @@ class Tank(pygame.sprite.Sprite):
 
         # sprite groups
         self.obstacle_group = obstacle_group
-        self.bullet_group = bullet_group
-
         self.velocity = 2.5
         self.health = 3
-        
+        self.bullet_group = pygame.sprite.Group()
         
         self.angle = angle
         self.rotAngle = 0
@@ -27,11 +25,16 @@ class Tank(pygame.sprite.Sprite):
         self.og_image = pygame.image.load(assetPicture).convert_alpha()
         self.image = self.og_image
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
+        self.rotate()
+
+        # shoot cooldown
+        cooldown_timer = pygame.USEREVENT + 1
+        pygame.time.set_timer(cooldown_timer, 400)
         
         
     def player_input(self, a):
-        keys = pygame.key.get_pressed()
         
+        keys = pygame.key.get_pressed()
         if a == 1:
             if keys[pygame.K_UP]:
                 self.move(1)
@@ -45,18 +48,19 @@ class Tank(pygame.sprite.Sprite):
                 self.rotate()
             if keys[pygame.K_SPACE]:
                 self.shoot()
-
         if a == 2:
             if keys[pygame.K_a]:
                 self.rotAngle = 2
                 self.rotate()
             if keys[pygame.K_w]:
-                self.move(-1)
+                self.move(1)
             if keys[pygame.K_d]:
                 self.rotAngle = -2
                 self.rotate()
             if keys[pygame.K_s]:
-                self.move(1)
+                self.move(-1)
+            if keys[pygame.K_v]:
+                self.shoot()
     # Moves the player in the specified direction.
     def move(self, offset):
         
@@ -113,7 +117,6 @@ class Tank(pygame.sprite.Sprite):
     def rotate(self):
         self.image = pygame.transform.rotate(self.og_image, self.angle).convert_alpha()
         self.angle += self.rotAngle
-        print('angle before rotation' + str(self.angle))
         
         self.rotAngle = 0
         self.angle = self.angle % 360
@@ -121,7 +124,15 @@ class Tank(pygame.sprite.Sprite):
             self.angle += 360
 
         self.rect = self.image.get_rect(center = self.rect.center)
-       
+    
+    # shoot adds a bullet
 
     def shoot(self):
-        self.bullet_group.add(Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen))
+        bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen)
+        self.bullet_group.add(bullet)
+
+    def get_bullets(self):
+        return self.bullet_group
+    # reduce lives if hit by enemy bullet
+    def reduce_lives(self):
+        print('hit')
