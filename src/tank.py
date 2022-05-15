@@ -29,36 +29,6 @@ class Tank(pygame.sprite.Sprite):
         self.rotate()
 
         
-        
-    def player_input(self, a):
-        
-        keys = pygame.key.get_pressed()
-        if a == 1:
-            if keys[pygame.K_UP]:
-                self.move(1)
-            if keys[pygame.K_DOWN]:
-                self.move(-1)
-            if keys[pygame.K_LEFT]:
-                self.rotAngle = 2
-                self.rotate()
-            if keys[pygame.K_RIGHT]:
-                self.rotAngle = -2
-                self.rotate()
-            if keys[pygame.K_SPACE]:
-                self.shoot()
-        if a == 2:
-            if keys[pygame.K_a]:
-                self.rotAngle = 2
-                self.rotate()
-            if keys[pygame.K_w]:
-                self.move(1)
-            if keys[pygame.K_d]:
-                self.rotAngle = -2
-                self.rotate()
-            if keys[pygame.K_s]:
-                self.move(-1)
-            if keys[pygame.K_v]:
-                self.shoot()
     # Moves the player in the specified direction.
     def move(self, offset):
         
@@ -79,9 +49,10 @@ class Tank(pygame.sprite.Sprite):
             self.rect.y = 830
 
     # blit is not needed when using sprite
+    """
     def update(self, a):
         self.player_input(a)
-
+    """
     # this method moves the player in a horizontal direction
     def moveX(self, offset):
         # creates a copy of the player rect and moves it to where the player will
@@ -124,15 +95,18 @@ class Tank(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.rect.center)
     
     # set cooldown_tracker to a certain value
-    def set_cooldown(self, value):
-        self.cooldown_tracker = value
+    def shot_tracker(self, value):
+        self.cooldown_tracker += value
+        if self.cooldown_tracker > 300:
+            self.cooldown_tracker = 0
 
     # shoot adds a bullet
 
     def shoot(self):
-        global cooldown_tracker
-        bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen)
-        self.bullet_group.add(bullet)
+    
+        if self.cooldown_tracker == 0:
+            bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen)
+            self.bullet_group.add(bullet)
 
     def get_bullets(self):
         return self.bullet_group

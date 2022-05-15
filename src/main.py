@@ -110,8 +110,10 @@ def main():
 
     
     # create clock object to ensure good fps
+    # and limit rate of fire
     clock = pygame.time.Clock()
-    global current_time
+    clock_2 = pygame.time.Clock()
+
     # Initialize the startscreen
     startScreen(screen, clock)
     running = True
@@ -121,7 +123,36 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.QUIT()
                 exit()
-
+        
+        
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            player_1.move(1)
+        if keys[pygame.K_DOWN]:
+            player_1.move(-1)
+        if keys[pygame.K_LEFT]:
+            player_1.rotAngle = 2
+            player_1.rotate()
+        if keys[pygame.K_RIGHT]:
+            player_1.rotAngle = -2
+            player_1.rotate()
+        if keys[pygame.K_SPACE]:
+            player_1.shot_tracker(clock.get_time())
+            player_1.shoot()
+    
+        if keys[pygame.K_a]:
+            player_2.rotAngle = 2
+            player_2.rotate()
+        if keys[pygame.K_w]:
+            player_2.move(1)
+        if keys[pygame.K_d]:
+            player_2.rotAngle = -2
+            player_2.rotate()
+        if keys[pygame.K_s]:
+            player_2.move(-1)
+        if keys[pygame.K_v]:
+            player_2.shot_tracker(clock_2.get_time())
+            player_2.shoot()
         # draw screen
         screen.blit(surf_background, (0, 0))
 
@@ -161,8 +192,8 @@ def main():
         pygame.display.update()
 
         # maximum of 60 fps
-        current_time = clock.get_time()
         clock.tick(60)
+        clock_2.tick(60)
 
 
 main()
