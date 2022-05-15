@@ -12,13 +12,14 @@ class Tank(pygame.sprite.Sprite):
         self.screen = screen
         self.xPos = xpos
         self.yPos = ypos
+        
 
         # sprite groups
         self.obstacle_group = obstacle_group
         self.velocity = 2.5
         self.health = 3
         self.bullet_group = pygame.sprite.Group()
-        
+        self.cooldown_tracker = 0
         self.angle = angle
         self.rotAngle = 0
         
@@ -27,9 +28,6 @@ class Tank(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
         self.rotate()
 
-        # shoot cooldown
-        cooldown_timer = pygame.USEREVENT + 1
-        pygame.time.set_timer(cooldown_timer, 400)
         
         
     def player_input(self, a):
@@ -123,16 +121,22 @@ class Tank(pygame.sprite.Sprite):
         if self.angle < 0:
             self.angle += 360
 
-        self.rect = self.image.get_rect(center = self.rect.center)
+        self.rect = self.image.get_rect(center=self.rect.center)
     
+    # set cooldown_tracker to a certain value
+    def set_cooldown(self, value):
+        self.cooldown_tracker = value
+
     # shoot adds a bullet
 
     def shoot(self):
+        global cooldown_tracker
         bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen)
         self.bullet_group.add(bullet)
 
     def get_bullets(self):
         return self.bullet_group
+    
     # reduce lives if hit by enemy bullet
     def reduce_lives(self):
         print('hit')

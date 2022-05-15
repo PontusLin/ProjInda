@@ -78,8 +78,6 @@ def startScreen(screen, clock):
         
         pygame.display.update()
         clock.tick(60)
-        
-    
 
 # main class
 def main():
@@ -102,18 +100,20 @@ def main():
     # bullet_group_player_2 = pygame.sprite.Group()
 
     # make 1 single group per playerTank
+    player_1 = Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_1 = pygame.sprite.GroupSingle()
-    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0))
+    playerTank_1.add(player_1)
     
+    player_2 = Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0)
     playerTank_2 = pygame.sprite.GroupSingle()
-    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0))
+    playerTank_2.add(player_2)
 
+    
     # create clock object to ensure good fps
     clock = pygame.time.Clock()
-
+    global current_time
     # Initialize the startscreen
     startScreen(screen, clock)
-    
     running = True
     # main game loop
     while running:
@@ -139,15 +139,12 @@ def main():
         obstacles.draw(screen)
         
         # draw all bullets
-        for tank1 in playerTank_1:
-            tank1_bullets = tank1.get_bullets()
-        
+        tank1_bullets = player_1.get_bullets()
+        tank2_bullets = player_2.get_bullets()
+
         tank1_bullets.draw(screen)
         tank1_bullets.update()
-
-        for tank2 in playerTank_2:
-            tank2_bullets = tank2.get_bullets()
-
+        tank2_bullets = player_2.get_bullets()
         tank2_bullets.draw(screen)
         tank2_bullets.update()
         
@@ -164,6 +161,7 @@ def main():
         pygame.display.update()
 
         # maximum of 60 fps
+        current_time = clock.get_time()
         clock.tick(60)
 
 
