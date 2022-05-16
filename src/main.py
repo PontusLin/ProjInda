@@ -181,7 +181,11 @@ def main():
         tank2_bullets.draw(screen)
         tank2_bullets.update()
         
-        # if a tank is hit by the opponent's bullet, 
+        # if a bullet collides with an obstacle, kill it (take it away)
+        pygame.sprite.groupcollide(tank1_bullets, obstacles, True, False)
+        pygame.sprite.groupcollide(tank2_bullets, obstacles, True, False)
+
+        # if a tank is hit by the opponent's bullet,
         # kill the bullet but not the tank
         tank1_hit = pygame.sprite.groupcollide(playerTank_1, tank2_bullets, False, True)
         tank2_hit = pygame.sprite.groupcollide(playerTank_2, tank1_bullets, False, True)
