@@ -119,6 +119,12 @@ def main():
 
     obstacles.add(Obstacle(895, 120, screen, 'assets/obstacle.png'))
     obstacles.add(Obstacle(980, 120, screen, 'assets/obstacle.png'))
+
+    obstacles.add(Obstacle(120, 576, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(250, 576, screen, 'assets/obstacle.png'))
+
+    obstacles.add(Obstacle(260, 223, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(360, 323, screen, 'assets/obstacle.png'))
     # create player tanks and each to their own single sprite group
     player_1 = Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_1 = pygame.sprite.GroupSingle()
