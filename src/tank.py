@@ -118,4 +118,7 @@ class Tank(pygame.sprite.Sprite):
 
     # reduce lives if hit by enemy bullet
     def reduce_lives(self):
-        print('hit')
+        self.health -= 1
+
+    def get_health(self):
+        return self.health

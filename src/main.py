@@ -1,5 +1,8 @@
+from ast import Break
+from os import system
 import pygame
 from sys import exit
+from Lives import Lives
 
 from tank import Tank
 from obstacle import Obstacle
@@ -9,8 +12,8 @@ from obstacle import Obstacle
 (width, height) = (1200, 800)
 
 # Help function to create text objects, that will say the surface and the associated rectangle
-def text_objects(text, font):
-    textSurface = font.render(text, True, (0, 0, 0))
+def text_objects(text, font, color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
 
@@ -22,14 +25,14 @@ def startScreen(screen, clock):
     smallText = pygame.font.Font('freesansbold.ttf', 50)
     
     # create text element 'TANKS!'
-    TextSurf, TextRect = text_objects("TANKS!", largeText)
+    TextSurf, TextRect = text_objects("TANKS!", largeText, (0,0,0))
     TextRect.center = (width/2, height/4)
     
     # Create 'buttons'
-    button_play_surf, button_play_rect = text_objects("Play", smallText)
+    button_play_surf, button_play_rect = text_objects("Play", smallText, (0,0,0))
     button_play_rect.center = (width/2, height/2)
     
-    button_quit_surf, button_quit_rect = text_objects("Quit", smallText)
+    button_quit_surf, button_quit_rect = text_objects("Quit", smallText,(0,0,0))
     button_quit_rect.center = (width/2, height/1.5)
     
     # Create assets to blit on screen
@@ -88,6 +91,16 @@ def main():
     screen = pygame.display.set_mode((width, height))
     surf_background = pygame.image.load('assets/background.png').convert_alpha()
     pygame.display.set_caption('Tanks')
+    
+    surf_player_lives = pygame.Surface((670, 100))
+    surf_player_lives.fill((0,0,0))
+    rect_player_lives = surf_player_lives.get_rect(topleft = (105, 0))
+    reallySmallText = pygame.font.Font('freesansbold.ttf', 25)
+    player1_text_surf, player1_text_rect = text_objects('Player 1', reallySmallText, (255,255,255))
+    player1_text_rect.center = (225, 85)
+    
+    player2_text_surf, player2_text_rect = text_objects('Player 2', reallySmallText, (255,255,255))
+    player2_text_rect.center = (650, 85)
 
 
     # make a group with all obstacles. xpos and ypos will be topleft 
@@ -114,6 +127,17 @@ def main():
     player_2 = Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0)
     playerTank_2 = pygame.sprite.GroupSingle()
     playerTank_2.add(player_2)
+    
+    lives_player1 = pygame.sprite.Group()
+    lives_player1.add(Lives(125, 10, screen, 'assets/heart.png'))
+    lives_player1.add(Lives(200, 10, screen, 'assets/heart.png'))
+    lives_player1.add(Lives(275, 10, screen, 'assets/heart.png'))
+    
+    lives_player2 = pygame.sprite.Group()
+    lives_player2.add(Lives(530, 10, screen, 'assets/heart.png'))
+    lives_player2.add(Lives(605, 10, screen, 'assets/heart.png'))
+    lives_player2.add(Lives(680, 10, screen, 'assets/heart.png'))
+    
 
     
     # create clock object to ensure good fps
@@ -167,8 +191,11 @@ def main():
         # draw screen
         screen.blit(surf_background, (0, 0))
 
+        
         # blit obstacle (will be sprite later)
         # screen.blit(surf_obstacle, rect_obstacle1)
+        
+        
 
         # update and draw the player tanks
         playerTank_1.draw(screen)
@@ -179,6 +206,34 @@ def main():
 
         # draw all the obstacles
         obstacles.draw(screen)
+        
+        # draw all player lives
+        
+            
+        screen.blit(surf_player_lives, rect_player_lives)
+        screen.blit(player1_text_surf, player1_text_rect)
+        screen.blit(player2_text_surf, player2_text_rect)
+        
+        x = player_1.get_health()
+        for life in lives_player1:
+            if player_1.get_health() <= 0:
+                screen.fill((255,255,255))
+                gameOver(clock, screen, 'Player 2', 'Player 1')
+                running = False
+                break
+            life.draw()
+            x -= 1
+        
+        x = player_2.get_health()
+        for life in lives_player2:
+            if player_2.get_health() <= 0:
+                screen.fill((255,255,255))
+                gameOver(clock, screen, 'Player 1', 'Player 2')
+                running = False
+                break
+            if x > 0:
+                life.draw()
+            x -= 1
         
         # getthe tanks' bullets, that are stored
         # as fields in the tank objects.
@@ -213,6 +268,39 @@ def main():
         # maximum of 60 fps
         clock.tick(60)
         clock_2.tick(60)
-
+    
+    
+        
+# Game over screen, shows when one player wins
+def gameOver(clock, screen, winner, loser):
+    largeText = pygame.font.Font('freesansbold.ttf',115)
+    TextSurf1, TextRect1 = text_objects("GAME OVER", largeText, (0,0,0))
+    TextSurf2, TextRect2 = text_objects(winner + ' won', largeText, (0,0,0))
+    TextSurf3, TextRect3 = text_objects('And', largeText, (0,0,0))
+    TextSurf4, TextRect4 = text_objects(loser + ' lost', largeText, (0,0,0))
+    
+    TextRect1.center = (width/2, 100)
+    TextRect2.center = (width/2, 300)
+    TextRect3.center = (width/2, 500)
+    TextRect4.center = (width/2, 700)
+    
+    time = 0
+    outro = True
+    while outro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.QUIT()
+                exit()
+        screen.fill((255,255,255))
+        screen.blit(TextSurf1, TextRect1)
+        screen.blit(TextSurf2, TextRect2)
+        screen.blit(TextSurf3, TextRect3)
+        screen.blit(TextSurf4, TextRect4)
+        
+        time += 1
+        if time >= 500:
+            main()
+        pygame.display.update()
+        clock.tick(60)
 
 main()
