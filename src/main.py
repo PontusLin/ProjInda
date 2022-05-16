@@ -94,8 +94,18 @@ def main():
     # location of rect
     obstacles = pygame.sprite.Group()
     obstacles.add(Obstacle(100, 1, screen, 'assets/obstacle.png'))
-         
+    obstacles.add(Obstacle(200, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(300, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(400, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(500, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(598, 122, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(678, 1, screen, 'assets/obstacle.png'))
 
+    obstacles.add(Obstacle(598, 344, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(720, 445, screen, 'assets/obstacle.png'))
+
+    obstacles.add(Obstacle(895, 120, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(980, 120, screen, 'assets/obstacle.png'))
     # create player tanks and each to their own single sprite group
     player_1 = Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_1 = pygame.sprite.GroupSingle()
