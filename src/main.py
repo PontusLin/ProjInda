@@ -78,8 +78,6 @@ def startScreen(screen, clock):
         
         pygame.display.update()
         clock.tick(60)
-        
-    
 
 # main class
 def main():
@@ -96,24 +94,35 @@ def main():
     # location of rect
     obstacles = pygame.sprite.Group()
     obstacles.add(Obstacle(100, 1, screen, 'assets/obstacle.png'))
-        
-    # group for bullets
-    bullet_group = pygame.sprite.Group()
+    obstacles.add(Obstacle(200, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(300, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(400, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(500, 1, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(598, 122, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(678, 1, screen, 'assets/obstacle.png'))
 
-    # make 1 single group per playerTank
+    obstacles.add(Obstacle(598, 344, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(720, 445, screen, 'assets/obstacle.png'))
+
+    obstacles.add(Obstacle(895, 120, screen, 'assets/obstacle.png'))
+    obstacles.add(Obstacle(980, 120, screen, 'assets/obstacle.png'))
+    # create player tanks and each to their own single sprite group
+    player_1 = Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_1 = pygame.sprite.GroupSingle()
-    playerTank_1.add(Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0, bullet_group))
+    playerTank_1.add(player_1)
     
+    player_2 = Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0)
     playerTank_2 = pygame.sprite.GroupSingle()
-    playerTank_2.add(Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0, bullet_group))
+    playerTank_2.add(player_2)
 
+    
     # create clock object to ensure good fps
+    # Create two clocks to control rate of fire of both tanks
     clock = pygame.time.Clock()
+    clock_2 = pygame.time.Clock()
 
     # Initialize the startscreen
     startScreen(screen, clock)
-    
-    
     running = True
     # main game loop
     while running:
@@ -121,7 +130,40 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.QUIT()
                 exit()
-
+        
+        # Handle player input. the methods called are found
+        # in the tank class
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            player_1.move(1)
+        if keys[pygame.K_DOWN]:
+            player_1.move(-1)
+        if keys[pygame.K_LEFT]:
+            player_1.rotAngle = 2
+            player_1.rotate()
+        if keys[pygame.K_RIGHT]:
+            player_1.rotAngle = -2
+            player_1.rotate()
+        # when player 1 shoots, measure the time past since
+        # player 1 shot last time
+        if keys[pygame.K_SPACE]:
+            player_1.shot_tracker(clock.get_time())
+            player_1.shoot()
+        if keys[pygame.K_a]:
+            player_2.rotAngle = 2
+            player_2.rotate()
+        if keys[pygame.K_w]:
+            player_2.move(1)
+        if keys[pygame.K_d]:
+            player_2.rotAngle = -2
+            player_2.rotate()
+        if keys[pygame.K_s]:
+            player_2.move(-1)
+        # when player 2 shoots, measure the time past since
+        # player 2 shot last time
+        if keys[pygame.K_v]:
+            player_2.shot_tracker(clock_2.get_time())
+            player_2.shoot()
         # draw screen
         screen.blit(surf_background, (0, 0))
 
@@ -138,15 +180,39 @@ def main():
         # draw all the obstacles
         obstacles.draw(screen)
         
-        # draw all bullets
-        bullet_group.draw(screen)
-        bullet_group.update()
+        # getthe tanks' bullets, that are stored
+        # as fields in the tank objects.
+        tank1_bullets = player_1.get_bullets()
+        tank2_bullets = player_2.get_bullets()
+
+        tank1_bullets.draw(screen)
+        tank1_bullets.update()
+        tank2_bullets = player_2.get_bullets()
+        tank2_bullets.draw(screen)
+        tank2_bullets.update()
+        
+        # if a bullet collides with an obstacle, kill it (take it away)
+        pygame.sprite.groupcollide(tank1_bullets, obstacles, True, False)
+        pygame.sprite.groupcollide(tank2_bullets, obstacles, True, False)
+
+        # if a tank is hit by the opponent's bullet,
+        # kill the bullet but not the tank
+        tank1_hit = pygame.sprite.groupcollide(playerTank_1, tank2_bullets, False, True)
+        tank2_hit = pygame.sprite.groupcollide(playerTank_2, tank1_bullets, False, True)
+
+        # if a tank is hit, reduce the lives of the tank by 1
+        if tank1_hit:
+            playerTank_1.sprite.reduce_lives()
+
+        if tank2_hit:
+            playerTank_2.sprite.reduce_lives()
 
         # update display every iteration
         pygame.display.update()
 
         # maximum of 60 fps
         clock.tick(60)
+        clock_2.tick(60)
 
 
 main()
