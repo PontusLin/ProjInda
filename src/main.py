@@ -255,14 +255,8 @@ def main():
         tank2_bullets.update()
         
         # if a bullet collides with an obstacle, kill it (take it away)
-        bullets1_colliding_with_wall = pygame.sprite.groupcollide(tank1_bullets, obstacles, False, False)
-        bullets2_colliding_with_wall = pygame.sprite.groupcollide(tank2_bullets, obstacles, False, False)
-
-        for key in bullets1_colliding_with_wall:
-            key.bounce()
-
-        for key in bullets2_colliding_with_wall:
-            key.bounce()
+        pygame.sprite.groupcollide(tank1_bullets, obstacles, True, False)
+        pygame.sprite.groupcollide(tank2_bullets, obstacles, True, False)
         # if a tank is hit by the opponent's bullet,
         # kill the bullet but not the tank
         tank1_hit = pygame.sprite.groupcollide(playerTank_1, tank2_bullets, False, True)

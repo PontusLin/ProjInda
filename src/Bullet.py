@@ -41,6 +41,8 @@ class Bullet(pygame.sprite.Sprite):
 
     # if a bullet collides with a wall, have it bounce
     # a bouncing bullet changes direction and slows down a bit
+    """
     def bounce(self):
         self.speed = self.speed * 0.8
         self.direction = self.direction * (-1)
+    """
