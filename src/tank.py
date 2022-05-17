@@ -67,7 +67,6 @@ class Tank(pygame.sprite.Sprite):
         copy_of_rect.x += offset*self.velocity*math.cos(math.radians(-self.angle))
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
-                print('collision')
                 return
         else:
             self.rect.x += offset*self.velocity*math.cos(math.radians(-self.angle))
@@ -79,7 +78,6 @@ class Tank(pygame.sprite.Sprite):
         copy_of_rect.y += offset*self.velocity*math.sin(math.radians(-self.angle))
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
-                print('collision')
                 return
         else:
             self.rect.y += offset*self.velocity*math.sin(math.radians(-self.angle))
@@ -87,15 +85,27 @@ class Tank(pygame.sprite.Sprite):
 
     # Rotate the tank as the rotate angle field is
     def rotate(self):
-        self.image = pygame.transform.rotate(self.og_image, self.angle).convert_alpha()
-        self.angle += self.rotAngle
+        # make a copy of image and angle to check if rotating will 
+        # lead to a collision
+        image_copy = pygame.transform.rotate(self.og_image, self.angle).convert_alpha()
+        copys_angle = self.angle + self.rotAngle
+        copy_rect = image_copy.get_rect(center=self.rect.center)
 
-        self.rotAngle = 0
-        self.angle = self.angle % 360
-        if self.angle < 0:
-            self.angle += 360
+        for obstacle_sprite in self.obstacle_group:
+            if(obstacle_sprite.rect.colliderect(copy_rect)):
+                print('collision')
+                self.rotAngle = 0
+                return
+        else:
+            self.image = image_copy
+            self.angle = copys_angle
 
-        self.rect = self.image.get_rect(center=self.rect.center)
+            self.rotAngle = 0
+            self.angle = self.angle % 360
+            if self.angle < 0:
+                self.angle += 360
+
+            self.rect = copy_rect
     
     # track how long time has passed since 
     # the player called shoot last. If more than 300 ms,
