@@ -232,14 +232,14 @@ def main():
                 running = False
                 break
             if z > 0:
-                life.draw()
+                life.draw()   
             z -= 1
              
         y = player_2.get_health()
         for life in lives_player2:
             if player_2.get_health() <= 0:
                 screen.fill((255,255,255))
-                gameOver(clock, screen, 'Player 2', 'Player 1')
+                gameOver(clock, screen, 'Player 1', 'Player 2')
                 running = False
                 break
             if y > 0:
