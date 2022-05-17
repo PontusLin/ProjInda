@@ -2,8 +2,8 @@ from ast import Break
 from os import system
 import pygame
 from sys import exit
-from Lives import Lives
-
+from lives import Lives
+from pygame import mixer
 from tank import Tank
 from obstacle import Obstacle
 
@@ -102,6 +102,8 @@ def main():
     player2_text_surf, player2_text_rect = text_objects('Player 2', reallySmallText, (255,255,255))
     player2_text_rect.center = (650, 85)
 
+    # sounds
+    hurt_sound = mixer.Sound('assets/hurt.aiff')
 
     # make a group with all obstacles. xpos and ypos will be topleft 
     # location of rect
@@ -253,9 +255,14 @@ def main():
         tank2_bullets.update()
         
         # if a bullet collides with an obstacle, kill it (take it away)
-        pygame.sprite.groupcollide(tank1_bullets, obstacles, True, False)
-        pygame.sprite.groupcollide(tank2_bullets, obstacles, True, False)
+        bullets1_colliding_with_wall = pygame.sprite.groupcollide(tank1_bullets, obstacles, False, False)
+        bullets2_colliding_with_wall = pygame.sprite.groupcollide(tank2_bullets, obstacles, False, False)
 
+        for key in bullets1_colliding_with_wall:
+            key.bounce()
+
+        for key in bullets2_colliding_with_wall:
+            key.bounce()
         # if a tank is hit by the opponent's bullet,
         # kill the bullet but not the tank
         tank1_hit = pygame.sprite.groupcollide(playerTank_1, tank2_bullets, False, True)
@@ -263,9 +270,11 @@ def main():
 
         # if a tank is hit, reduce the lives of the tank by 1
         if tank1_hit:
+            hurt_sound.play()
             playerTank_1.sprite.reduce_lives()
 
         if tank2_hit:
+            hurt_sound.play()
             playerTank_2.sprite.reduce_lives()
 
         # update display every iteration

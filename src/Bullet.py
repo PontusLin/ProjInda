@@ -36,3 +36,11 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
         if self.rect.y <= -100 or self.rect.y > 900:
             self.kill()
+        if self.speed < 5:
+            self.kill()
+
+    # if a bullet collides with a wall, have it bounce
+    # a bouncing bullet changes direction and slows down a bit
+    def bounce(self):
+        self.speed = self.speed * 0.8
+        self.direction = self.direction * (-1)
