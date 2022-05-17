@@ -38,6 +38,7 @@ class Tank(pygame.sprite.Sprite):
         self.rotate()
 
 
+
     # Moves the player in the specified direction.
     def move(self, offset):
 
@@ -122,3 +123,5 @@ class Tank(pygame.sprite.Sprite):
 
     def get_health(self):
         return self.health
+
+
