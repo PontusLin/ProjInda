@@ -222,26 +222,31 @@ def main():
         screen.blit(player1_text_surf, player1_text_rect)
         screen.blit(player2_text_surf, player2_text_rect)
         
-        x = player_1.get_health()
+       
+            
+        z = player_1.get_health()
         for life in lives_player1:
             if player_1.get_health() <= 0:
                 screen.fill((255,255,255))
                 gameOver(clock, screen, 'Player 2', 'Player 1')
                 running = False
                 break
-            life.draw()
-            x -= 1
-        
-        x = player_2.get_health()
+            if z > 0:
+                life.draw()
+            z -= 1
+             
+        y = player_2.get_health()
         for life in lives_player2:
             if player_2.get_health() <= 0:
                 screen.fill((255,255,255))
-                gameOver(clock, screen, 'Player 1', 'Player 2')
+                gameOver(clock, screen, 'Player 2', 'Player 1')
                 running = False
                 break
-            if x > 0:
+            if y > 0:
                 life.draw()
-            x -= 1
+            y -= 1
+        
+       
         
         # getthe tanks' bullets, that are stored
         # as fields in the tank objects.
