@@ -2,7 +2,7 @@ from ast import Break
 from os import system
 import pygame
 from sys import exit
-from Lives import Lives
+from lives import Lives
 
 from tank import Tank
 from obstacle import Obstacle
@@ -169,24 +169,20 @@ def main():
         if keys[pygame.K_DOWN]:
             player_1.move(-1)
         if keys[pygame.K_LEFT]:
-            player_1.rotAngle = 2
-            player_1.rotate()
+            player_1.rotate(2)
         if keys[pygame.K_RIGHT]:
-            player_1.rotAngle = -2
-            player_1.rotate()
+            player_1.rotate(-2)
         # when player 1 shoots, measure the time past since
         # player 1 shot last time
         if keys[pygame.K_SPACE]:
             player_1.shot_tracker(clock.get_time())
             player_1.shoot()
         if keys[pygame.K_a]:
-            player_2.rotAngle = 2
-            player_2.rotate()
+            player_2.rotate(2)
         if keys[pygame.K_w]:
             player_2.move(1)
         if keys[pygame.K_d]:
-            player_2.rotAngle = -2
-            player_2.rotate()
+            player_2.rotate(-2)
         if keys[pygame.K_s]:
             player_2.move(-1)
         # when player 2 shoots, measure the time past since
