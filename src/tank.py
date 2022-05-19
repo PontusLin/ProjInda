@@ -13,6 +13,8 @@ from turtle import speed
     The tanks' bullets are stored in a sprite group, in the tank class.
     This sprite group is accessed by the main method via a get method.
 """
+
+
 class Tank(pygame.sprite.Sprite):
     def __init__(self, xpos, ypos, screen, assetPicture, obstacle_group, angle):
         super().__init__()
@@ -35,9 +37,9 @@ class Tank(pygame.sprite.Sprite):
         self.og_image = pygame.image.load(assetPicture).convert_alpha()
         self.image = self.og_image
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
-        self.rotate()
+        self.rotate(angle)     
         # sounds
-        self.shoot_sound = mixer.Sound('assets/shoot.wav')
+        self.shoot_sound = mixer.Sound('assets/shoot.wav'
 
 
     # Moves the player in the specified direction.
@@ -53,11 +55,6 @@ class Tank(pygame.sprite.Sprite):
             self.rect.x = -30
         if self.rect.x < -30:
             self.rect.x = 1230
-
-        if self.rect.y > 830:
-            self.rect.y = -30
-        if self.rect.y < -30:
-            self.rect.y = 830
 
     # this method moves the player in a horizontal direction
     def moveX(self, offset):
@@ -77,6 +74,11 @@ class Tank(pygame.sprite.Sprite):
     def moveY(self, offset):
         copy_of_rect = pygame.Rect.copy(self.rect)
         copy_of_rect.y += offset*self.velocity*math.sin(math.radians(-self.angle))
+
+        if copy_of_rect.y < -20:
+            return
+        elif copy_of_rect.y > 720:
+            return
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 return
@@ -85,17 +87,43 @@ class Tank(pygame.sprite.Sprite):
             self.yPos = offset*self.velocity*math.sin(math.radians(-self.angle))
 
     # Rotate the tank as the rotate angle field is
-    def rotate(self):
-        self.image = pygame.transform.rotate(self.og_image, self.angle).convert_alpha()
-        self.angle += self.rotAngle
+    def rotate(self, target_rotation):
 
-        self.rotAngle = 0
+        if abs(target_rotation) < 0.2:
+            return
+        # check if the rotation angle you want to apply
+        # will lead to a collision or not. if so: try with half the angle
+        imminent_collision = self.test_rotation_for_collisions(target_rotation)
+        if imminent_collision:
+            self.rotate(target_rotation/2)
+
+        else:
+            self.apply_rotation(target_rotation)
+
+    # test if rotation will lead to collision or not
+    # returns true if collision occurs
+    def test_rotation_for_collisions(self, target_rotation_angle):
+        copys_angle = self.angle
+        image_copy = pygame.transform.rotate(self.og_image, copys_angle).convert_alpha()
+        copys_angle = self.angle + self.rotAngle
+        copy_rect = image_copy.get_rect(center=self.rect.center)
+
+        # tests if the fictional rect will colide with any obstacle
+        for obstacle_sprite in self.obstacle_group:
+            if(obstacle_sprite.rect.colliderect(copy_rect)):
+                return True
+
+    # apply rotation with the sought rotation_angle
+    def apply_rotation(self, rotation_angle):
+        self.image = pygame.transform.rotate(self.og_image, self.angle).convert_alpha()
+        self.angle += rotation_angle
+
         self.angle = self.angle % 360
         if self.angle < 0:
             self.angle += 360
 
         self.rect = self.image.get_rect(center=self.rect.center)
-    
+
     # track how long time has passed since 
     # the player called shoot last. If more than 300 ms,
     # enough time has passed -> set cooldown_tracker to 0
@@ -123,5 +151,3 @@ class Tank(pygame.sprite.Sprite):
 
     def get_health(self):
         return self.health
-
-

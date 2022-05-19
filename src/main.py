@@ -132,7 +132,7 @@ def main():
     playerTank_1 = pygame.sprite.GroupSingle()
     playerTank_1.add(player_1)
     
-    player_2 = Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0)
+    player_2 = Tank(1125, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_2 = pygame.sprite.GroupSingle()
     playerTank_2.add(player_2)
     
@@ -140,7 +140,6 @@ def main():
     lives_player1.add(Lives(125, 10, screen, 'assets/heart.png'))
     lives_player1.add(Lives(200, 10, screen, 'assets/heart.png'))
     lives_player1.add(Lives(275, 10, screen, 'assets/heart.png'))
-    
     lives_player2 = pygame.sprite.Group()
     lives_player2.add(Lives(530, 10, screen, 'assets/heart.png'))
     lives_player2.add(Lives(605, 10, screen, 'assets/heart.png'))
@@ -171,24 +170,20 @@ def main():
         if keys[pygame.K_DOWN]:
             player_1.move(-1)
         if keys[pygame.K_LEFT]:
-            player_1.rotAngle = 2
-            player_1.rotate()
+            player_1.rotate(2)
         if keys[pygame.K_RIGHT]:
-            player_1.rotAngle = -2
-            player_1.rotate()
+            player_1.rotate(-2)
         # when player 1 shoots, measure the time past since
         # player 1 shot last time
         if keys[pygame.K_SPACE]:
             player_1.shot_tracker(clock.get_time())
             player_1.shoot()
         if keys[pygame.K_a]:
-            player_2.rotAngle = 2
-            player_2.rotate()
+            player_2.rotate(2)
         if keys[pygame.K_w]:
             player_2.move(1)
         if keys[pygame.K_d]:
-            player_2.rotAngle = -2
-            player_2.rotate()
+            player_2.rotate(-2)
         if keys[pygame.K_s]:
             player_2.move(-1)
         # when player 2 shoots, measure the time past since
