@@ -127,6 +127,7 @@ def main():
 
     obstacles.add(Obstacle(260, 223, screen, 'assets/obstacle.png'))
     obstacles.add(Obstacle(360, 323, screen, 'assets/obstacle.png'))
+
     # create player tanks and each to their own single sprite group
     player_1 = Tank(75, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_1 = pygame.sprite.GroupSingle()
@@ -136,6 +137,7 @@ def main():
     playerTank_2 = pygame.sprite.GroupSingle()
     playerTank_2.add(player_2)
     
+    # add lives that will be displayed on screen
     lives_player1 = pygame.sprite.Group()
     lives_player1.add(Lives(125, 10, screen, 'assets/heart.png'))
     lives_player1.add(Lives(200, 10, screen, 'assets/heart.png'))
@@ -217,7 +219,6 @@ def main():
         screen.blit(player1_text_surf, player1_text_rect)
         screen.blit(player2_text_surf, player2_text_rect)
         
-       
             
         z = player_1.get_health()
         for life in lives_player1:

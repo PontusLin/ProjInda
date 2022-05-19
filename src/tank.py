@@ -39,8 +39,7 @@ class Tank(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
         self.rotate(angle)     
         # sounds
-        self.shoot_sound = mixer.Sound('assets/shoot.wav'
-
+        self.shoot_sound = mixer.Sound('assets/shoot.wav')
 
     # Moves the player in the specified direction.
     def move(self, offset):
@@ -48,7 +47,6 @@ class Tank(pygame.sprite.Sprite):
         self.moveX(offset)
         self.moveY(offset)
 
-        #collision_list = pygame.sprite.spritecollide(self, self.obstacle_group, False)
         # if player goes outside the screen,
         # have the player re appear on the other side
         if self.rect.x > 1230:
@@ -59,10 +57,12 @@ class Tank(pygame.sprite.Sprite):
     # this method moves the player in a horizontal direction
     def moveX(self, offset):
         # creates a copy of the player rect and moves it to where the player will
-        # move. Then checks if they will collide. if not -> move the player there
+        # move. Then checks if they will collide. 
+        # if not -> move the player there
         
         copy_of_rect = pygame.Rect.copy(self.rect)
         copy_of_rect.x += offset*self.velocity*math.cos(math.radians(-self.angle))
+        # verify that the rect copy doesn't collide with any obstacle
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 return
@@ -149,5 +149,6 @@ class Tank(pygame.sprite.Sprite):
     def reduce_lives(self):
         self.health -= 1
 
+    # return health remaining (used in main class for drawing them)
     def get_health(self):
         return self.health
