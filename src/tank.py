@@ -1,6 +1,6 @@
 import pygame
 import math
-
+from pygame import mixer
 from Bullet import Bullet
 from turtle import speed
 
@@ -37,8 +37,9 @@ class Tank(pygame.sprite.Sprite):
         self.og_image = pygame.image.load(assetPicture).convert_alpha()
         self.image = self.og_image
         self.rect = self.image.get_rect(midbottom=(self.xPos, self.yPos))
-        self.rotate(angle)
-
+        self.rotate(angle)     
+        # sounds
+        self.shoot_sound = mixer.Sound('assets/shoot.wav'
 
 
     # Moves the player in the specified direction.
@@ -137,6 +138,7 @@ class Tank(pygame.sprite.Sprite):
         if self.cooldown_tracker == 0:
             bullet = Bullet(self.rect.centerx, self.rect.centery, self.angle, self.screen)
             self.bullet_group.add(bullet)
+            self.shoot_sound.play()
 
     # return the tanks' bullets. Used in main method 
     # to draw the bullets
