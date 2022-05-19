@@ -55,11 +55,6 @@ class Tank(pygame.sprite.Sprite):
         if self.rect.x < -30:
             self.rect.x = 1230
 
-        if self.rect.y > 830:
-            self.rect.y = -30
-        if self.rect.y < -30:
-            self.rect.y = 830
-
     # this method moves the player in a horizontal direction
     def moveX(self, offset):
         # creates a copy of the player rect and moves it to where the player will
@@ -78,6 +73,11 @@ class Tank(pygame.sprite.Sprite):
     def moveY(self, offset):
         copy_of_rect = pygame.Rect.copy(self.rect)
         copy_of_rect.y += offset*self.velocity*math.sin(math.radians(-self.angle))
+
+        if copy_of_rect.y < -20:
+            return
+        elif copy_of_rect.y > 720:
+            return
         for obstacle_sprite in self.obstacle_group:
             if(obstacle_sprite.rect.colliderect(copy_of_rect)):
                 return

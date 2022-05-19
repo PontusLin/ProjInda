@@ -130,7 +130,7 @@ def main():
     playerTank_1 = pygame.sprite.GroupSingle()
     playerTank_1.add(player_1)
     
-    player_2 = Tank(1125, 535, screen, 'assets/enemytank.png', obstacles, 0)
+    player_2 = Tank(1125, 535, screen, 'assets/playertank.png', obstacles, 0)
     playerTank_2 = pygame.sprite.GroupSingle()
     playerTank_2.add(player_2)
     
@@ -138,7 +138,6 @@ def main():
     lives_player1.add(Lives(125, 10, screen, 'assets/heart.png'))
     lives_player1.add(Lives(200, 10, screen, 'assets/heart.png'))
     lives_player1.add(Lives(275, 10, screen, 'assets/heart.png'))
-    
     lives_player2 = pygame.sprite.Group()
     lives_player2.add(Lives(530, 10, screen, 'assets/heart.png'))
     lives_player2.add(Lives(605, 10, screen, 'assets/heart.png'))
